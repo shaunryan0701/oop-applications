@@ -2,6 +2,9 @@
 Object that contains the data about a bill,such as
 total amount and period of the bill
 """
+import os.path
+import webbrowser
+
 from fpdf import FPDF
 
 
@@ -52,7 +55,7 @@ class PdfReport:
 
         # Insert period label and value
         pdf.set_font(family='Times', size=14, style='B')
-        pdf.cell(w=100, h=40, txt='Period', border=0)
+        pdf.cell(w=100, h=40, txt='Period:', border=0)
         pdf.cell(w=150, h=40, txt=bill.period, border=0, ln=1)
 
         pdf.cell(w=100, h=40, txt=flatmate1.name, border=0)
@@ -62,6 +65,8 @@ class PdfReport:
         pdf.cell(w=150, h=40, txt=self.format_pay_amount(bill, flatmate2, flatmate1), border=0, ln=1)
 
         pdf.output(self.filename)
+
+        webbrowser.open('file://' + os.path.realpath(self.filename))
 
     @staticmethod
     def format_pay_amount(bill, flatmate1, flatmate2):
