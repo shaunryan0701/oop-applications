@@ -27,8 +27,8 @@ class FlatMate:
         self.name = name
         self.days_in_house = days_in_house
 
-    def pays(self, bill: Bill, flatmate2):
-        weight = self.days_in_house / (self.days_in_house + flatmate2.days_in_house)
+    def pays(self, bill: Bill, other_flatmate):
+        weight = self.days_in_house / (self.days_in_house + other_flatmate.days_in_house)
         return bill.amount * weight
 
 
@@ -70,18 +70,26 @@ class PdfReport:
 
     @staticmethod
     def format_pay_amount(bill, flatmate1, flatmate2):
-        return str(round(flatmate1.pays(bill=bill, flatmate2=flatmate2), 2))
+        return str(round(flatmate1.pays(bill=bill, other_flatmate=flatmate2), 2))
 
 
-bill_amount = 120
-the_bill = Bill(amount=bill_amount, period="March 2023")
+bill_amount = float(input('What is the bill amount: '))
+period = input('What is the bill period (eg December 2020): ')
 
-dave = FlatMate(name='Dave', days_in_house=27)
-geoff = FlatMate(name='Geoff', days_in_house=20)
+the_bill = Bill(amount=bill_amount, period=period)
 
-print('Dave pays', dave.pays(bill=the_bill, flatmate2=geoff))
-print('Geoff pays', geoff.pays(bill=the_bill, flatmate2=dave))
+name1 = input("What is your name: ")
+days_in_house1 = int(input(f'How many days {name1} in the house: '))
+
+name2 = input("What is your name: ")
+days_in_house2 = int(input(f'How many days {name2} in the house: '))
+
+flatmate1 = FlatMate(name=name1, days_in_house=days_in_house1)
+flatmate2 = FlatMate(name=name2, days_in_house=days_in_house2)
+
+print(f'{name1} pays', flatmate1.pays(bill=the_bill, other_flatmate=flatmate2))
+print(f'{name2} pays', flatmate2.pays(bill=the_bill, other_flatmate=flatmate1))
 
 pdf_report = PdfReport(filename='Report1.pdf')
-pdf_report.generate(dave, geoff, the_bill)
+pdf_report.generate(flatmate1, flatmate2, the_bill)
 
