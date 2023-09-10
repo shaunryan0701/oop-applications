@@ -81,7 +81,7 @@ the_bill = Bill(amount=bill_amount, period=period)
 name1 = input("What is your name: ")
 days_in_house1 = int(input(f'How many days {name1} in the house: '))
 
-name2 = input("What is your name: ")
+name2 = input("What is the name oif the other flatmate: ")
 days_in_house2 = int(input(f'How many days {name2} in the house: '))
 
 flatmate1 = FlatMate(name=name1, days_in_house=days_in_house1)
