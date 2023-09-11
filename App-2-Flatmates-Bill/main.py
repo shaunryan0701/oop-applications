@@ -1,77 +1,11 @@
-"""
-Object that contains the data about a bill,such as
-total amount and period of the bill
-"""
-import os.path
-import webbrowser
-
-from fpdf import FPDF
-
-
-class Bill:
-
-    def __init__(self, amount, period):
-        self.amount = amount
-        self.period = period
-
+from bill import Bill
+from flatmate import FlatMate
+from pdfreport import PdfReport
 
 """
 Creates a flatmate person who lives ib ethe flat and 
 pays a share of the bill
 """
-
-
-class FlatMate:
-
-    def __init__(self, name, days_in_house):
-        self.name = name
-        self.days_in_house = days_in_house
-
-    def pays(self, bill: Bill, other_flatmate):
-        weight = self.days_in_house / (self.days_in_house + other_flatmate.days_in_house)
-        return bill.amount * weight
-
-
-"""
-Creates a pdf file that contains data about the flatmates
-such as their names, their due amount and the period of 
-the bill
-"""
-
-
-class PdfReport:
-
-    def __init__(self, filename):
-        self.filename = filename
-
-    def generate(self, flatmate1, flatmate2, bill):
-
-        pdf = FPDF(orientation='P', unit='pt')
-        pdf.add_page()
-
-        # Add title
-        pdf.set_font(family='Times', size=24, style='B')
-        pdf.cell(w=0, h=80, txt='Flatmate Bill', border=0, align='C', ln=1)
-
-        # Insert period label and value
-        pdf.set_font(family='Times', size=14, style='B')
-        pdf.cell(w=100, h=40, txt='Period:', border=0)
-        pdf.cell(w=150, h=40, txt=bill.period, border=0, ln=1)
-
-        pdf.cell(w=100, h=40, txt=flatmate1.name, border=0)
-        pdf.cell(w=150, h=40, txt=self.format_pay_amount(bill, flatmate1, flatmate2), border=0, ln=1)
-
-        pdf.cell(w=100, h=40, txt=flatmate2.name, border=0)
-        pdf.cell(w=150, h=40, txt=self.format_pay_amount(bill, flatmate2, flatmate1), border=0, ln=1)
-
-        pdf.output(self.filename)
-
-        webbrowser.open('file://' + os.path.realpath(self.filename))
-
-    @staticmethod
-    def format_pay_amount(bill, flatmate1, flatmate2):
-        return str(round(flatmate1.pays(bill=bill, other_flatmate=flatmate2), 2))
-
 
 bill_amount = float(input('What is the bill amount: '))
 period = input('What is the bill period (eg December 2020): ')
@@ -87,9 +21,9 @@ days_in_house2 = int(input(f'How many days {name2} in the house: '))
 flatmate1 = FlatMate(name=name1, days_in_house=days_in_house1)
 flatmate2 = FlatMate(name=name2, days_in_house=days_in_house2)
 
-print(f'{name1} pays', flatmate1.pays(bill=the_bill, other_flatmate=flatmate2))
-print(f'{name2} pays', flatmate2.pays(bill=the_bill, other_flatmate=flatmate1))
+print(f'{flatmate1.name} pays', flatmate1.pays(bill=the_bill, other_flatmate=flatmate2))
+print(f'{flatmate2.name} pays', flatmate2.pays(bill=the_bill, other_flatmate=flatmate1))
 
-pdf_report = PdfReport(filename='Report1.pdf')
+pdf_report = PdfReport(filename=f'{the_bill.period}.pdf')
 pdf_report.generate(flatmate1, flatmate2, the_bill)
 
