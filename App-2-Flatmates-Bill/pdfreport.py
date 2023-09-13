@@ -4,10 +4,9 @@ such as their names, their due amount and the period of
 the bill
 """
 
-
 import webbrowser
 from fpdf import FPDF
-
+import os
 
 class PdfReport:
 
@@ -34,9 +33,10 @@ class PdfReport:
         pdf.cell(w=100, h=40, txt=flatmate2.name, border=0)
         pdf.cell(w=150, h=40, txt=self.format_pay_amount(bill, flatmate2, flatmate1), border=0, ln=1)
 
-        pdf.output(self.filename)
+        os.chdir('files')
+        pdf.output(f'{self.filename}')
 
-        webbrowser.open('file://' + os.path.realpath(self.filename))
+        webbrowser.open(self.filename)
 
     @staticmethod
     def format_pay_amount(bill, flatmate1, flatmate2):
