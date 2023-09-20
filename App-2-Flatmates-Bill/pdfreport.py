@@ -7,6 +7,8 @@ the bill
 import webbrowser
 from fpdf import FPDF
 import os
+from filestack import Client
+
 
 class PdfReport:
 
@@ -41,3 +43,15 @@ class PdfReport:
     @staticmethod
     def format_pay_amount(bill, flatmate1, flatmate2):
         return str(round(flatmate1.pays(bill=bill, other_flatmate=flatmate2), 2))
+
+
+class FileSharer:
+    def __init__(self, filepath, api_key='A1MyKk2SQQuCXyltPaN6vz'):
+        self.filepath = filepath
+        self.api_key = api_key
+
+    def share(self):
+        client = Client(self.api_key)
+
+        new_filelink = client.upload(filepath=self.filepath)
+        return new_filelink.url
