@@ -17,7 +17,17 @@ class Rectangle:
 
     distance = (x_distance ** 2 + y_distance ** 2) ** (1/ 2)  
     return distance
+  
 
-rectangle = Rectangle(108, 75, 70, 30)
+  def time_to_point(self, x, y, speed):
+    time = self.distance_to_point(x, y) / speed
+    return time
+    
+  def perimeter(self):
+    return (self.width * 2) + (self.height * 2)
+
+rectangle = Rectangle(3, 4, x=1, y=2)
 print(rectangle.area())
 print(rectangle.distance_to_point(190, 80))
+print(rectangle.time_to_point(2, 3, 20))
+print(rectangle.perimeter())
